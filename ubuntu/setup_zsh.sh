@@ -1,19 +1,19 @@
 #!/bin/bash
 # Update package lists
 echo "Updating package lists..."
-apt-get update -y
+sudo apt-get update -y
 
 # Update SO packages
 echo "Updating SO packages..."
-apt-get dist-upgrade -y
+sudo apt-get dist-upgrade -y
 
 # Cleaning SO packages
 echo "Updating SO packages..."
-apt-get auto-remove -y
+sudo apt-get auto-remove -y
 
 # Install zsh
 echo "Installing zsh..."
-apt-get install -y zsh
+sudo apt-get install -y zsh git wget
 
 # Install Oh My Zsh
 echo "Installing Oh My Zsh..."
