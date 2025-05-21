@@ -38,7 +38,7 @@ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 
 # Install fzf
 echo "Installing fzf plugin"
-Y | ~/.fzf/install
+~/.fzf/install
 
 # Path to the .zshrc file (adjust if needed)
 ZSHRC_FILE="${HOME}/.zshrc"
