@@ -1,22 +1,15 @@
 #!/bin/bash
-# This script is intended to be run on Ubuntu 22.04 LTS
-# It installs zsh, Oh My Zsh, and some useful plugins
-# It also updates the system and installs some dependencies
-# Path to the upgrade_system.sh script
-UPGRADE_SCRIPT_PATH="./upgrade_system.sh"
-# Check if the upgrade_system.sh script exists
-if [ ! -f "$UPGRADE_SCRIPT_PATH" ]; then
-  echo "Error: $UPGRADE_SCRIPT_PATH not found."
-  exit 1
-fi
-# Make the upgrade_system.sh script executable
-# and run it to update the system
-echo "Making upgrade_system.sh executable..."
-# Make the script executable
-chmod +x $UPGRADE_SCRIPT_PATH
-# Run the script
-echo "Running upgrade_system.sh..."
-./$UPGRADE_SCRIPT_PATH
+# Update package lists
+echo "Updating package lists..."
+sudo apt-get update -y
+
+# Update SO packages
+echo "Updating SO packages..."
+sudo apt-get dist-upgrade -y
+
+# Cleaning SO packages
+echo "Updating SO packages..."
+sudo apt-get auto-remove -y
 
 # Install zsh
 echo "Installing zsh..."
