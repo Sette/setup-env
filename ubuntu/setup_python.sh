@@ -7,10 +7,6 @@ set -euo pipefail
 # === Constants ===
 ZSHRC_FILE="${HOME}/.zshrc"
 BASHRC_FILE="${HOME}/.bashrc"
-PYENV_ROOT_LINE='export PYENV_ROOT="$HOME/.pyenv"'
-PYENV_PATH_LINE='[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"'
-PYENV_INIT_LINE='eval "$(pyenv init - bash)"'
-PYENV_VIRTUALENV_LINE='eval "$(pyenv virtualenv-init -)"'
 
 # === Functions ===
 
@@ -22,37 +18,6 @@ function check_success() {
   fi
 }
 
-function ensure_line_in_file() {
-  local line="$1"
-  local file="$2"
-  if ! grep -Fxq "$line" "$file"; then
-    echo "$line" >> "$file"
-    echo "Added: $line"
-  else
-    echo "Line already present: $line"
-  fi
-}
-
-CONFIG_LINES=(
-  "$PYENV_ROOT_LINE"
-  "$PYENV_PATH_LINE"
-  "$PYENV_INIT_LINE"
-  "$PYENV_VIRTUALENV_LINE"
-)
-
-function ensure_lines_in_file() {
-  local file="$1"
-  echo "Updating $file..."
-  touch "$file"  # Ensure the file exists
-  for line in "${CONFIG_LINES[@]}"; do
-    if ! grep -Fxq "$line" "$file"; then
-      echo "$line" >> "$file"
-      echo "  Added: $line"
-    else
-      echo "  Already present: $line"
-    fi
-  done
-}
 
 function reload_zshrc() {
   echo "Reloading $ZSHRC_FILE..."
@@ -66,16 +31,9 @@ function reload_bashrc() {
   echo "$BASHRC_FILE reloaded successfully."
 }
 
-function add_pyenv_config_to_interpreter() {
-  echo "Adding pyenv configuration to $ZSHRC_FILE and $BASHRC_FILE..."
-  ensure_lines_in_file "$ZSHRC_FILE"
-  ensure_lines_in_file "$BASHRC_FILE"
-  echo "pyenv configuration successfully updated in $ZSHRC_FILE and $BASHRC_FILE."
-}
-
 
 function install_last_python_global() {
-  echo "Fetching latest stable Python version from pyenv..."
+  echo "Fetching latest stable Python version from UV..."
   local latest_version
   latest_version=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | grep -v - | tail -1 | tr -d '[:space:]')
 
@@ -99,12 +57,14 @@ function install_last_python_global() {
 
 
 function install_python_global() {
-  pyenv install 3.12.10
-  pyenv global 3.12.10
+  uv python install 3.12.11
+  uv python pin 3.12.11
 }
 
 function install_pipx() {
-  pip install pipx
+  uv venv
+  source .venv/bin/activate
+  uv pip install pipx
   pipx install poetry
   pipx ensurepath
   # Ensure in Zsh context
@@ -116,23 +76,19 @@ function install_pipx() {
 # Update package lists
 echo "Updating package lists..."
 
-#Instalando pyenv
+#Instalando UV
 echo "Instalando requirements system packages..."
 sudo apt install -y make curl build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 check_success "sudo apt install"
 
-# Download pyenv
+# Download UV
 echo "Upgrading system packages..."
-curl https://pyenv.run | bash
-check_success "curl https://pyenv.run"
+curl -LsSf https://astral.sh/uv/install.sh | sh
+check_success "curl -LsSf https://astral.sh/uv/install.sh"
 
-
-add_pyenv_config_to_interpreter
-reload_bashrc
+# reload_zshrc
 install_python_global
-reload_bashrc
 install_pipx
-reload_bashrc
 
 # Remove unnecessary packages
 echo "Removing unnecessary packages..."
