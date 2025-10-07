@@ -18,44 +18,6 @@ function check_success() {
   fi
 }
 
-
-function reload_zshrc() {
-  echo "Reloading $ZSHRC_FILE..."
-  source "$ZSHRC_FILE"
-  echo "$ZSHRC_FILE reloaded successfully."
-}
-
-function reload_bashrc() {
-  echo "Reloading $BASHRC_FILE..."
-  source "$BASHRC_FILE"
-  echo "$BASHRC_FILE reloaded successfully."
-}
-
-
-function install_last_python_global() {
-  echo "Fetching latest stable Python version from UV..."
-  local latest_version
-  latest_version=$(pyenv install --list | grep -E '^\s*3\.[0-9]+\.[0-9]+$' | grep -v - | tail -1 | tr -d '[:space:]')
-
-  if [ -z "$latest_version" ]; then
-    echo "Could not determine the latest Python version."
-    return 1
-  fi
-
-  echo "Installing Python $latest_version..."
-  pyenv install "$latest_version"
-  pyenv global "$latest_version"
-
-  echo "Installing pipx and poetry..."
-  pip install --upgrade pip
-  pip install pipx
-  pipx install poetry
-  pipx ensurepath
-
-  echo "Python $latest_version installed globally with Poetry via pipx."
-}
-
-
 function install_python_global() {
   uv python install 3.12.11
   uv python pin 3.12.11
@@ -88,7 +50,6 @@ check_success "curl -LsSf https://astral.sh/uv/install.sh"
 
 # reload_zshrc
 install_python_global
-install_pipx
 
 # Remove unnecessary packages
 echo "Removing unnecessary packages..."
