@@ -48,7 +48,6 @@ echo "Upgrading system packages..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
 check_success "curl -LsSf https://astral.sh/uv/install.sh"
 
-# reload_zshrc
 install_python_global
 
 # Remove unnecessary packages
