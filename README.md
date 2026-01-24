@@ -49,7 +49,7 @@ uv venv
 Ativando a .venv:
 
 ```bash
-source .venv/
+source .venv/bin/activate
 ```
 
 
