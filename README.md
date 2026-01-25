@@ -11,7 +11,6 @@ Automatizar a preparação do ambiente de dados e ciência, instalando ferrament
 - **ubuntu/**: Scripts para preparar ambiente Ubuntu (instalação de Docker, Python, Zsh, etc.).
 - **fedora/**: Scripts para preparar ambiente Fedora (instalação de Docker, Python, Zsh, etc.).
 - **amazon/**: Scripts para Amazon Linux (ex: configuração aprimorada do Zsh).
-- **Send-SSHKey.ps1**: Script PowerShell para envio de chaves SSH.
 - **LICENSE**: Licença do projeto (MIT License).
 
 ## Como Usar
