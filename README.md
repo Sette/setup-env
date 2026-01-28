@@ -1,4 +1,4 @@
-# Setup-Kaggle-env
+# Setup-env
 
 Este repositório contém um conjunto de scripts e configurações para facilitar o setup de ambientes de desenvolvimento semelhantes ao Kaggle em diferentes distribuições Linux: Ubuntu, Fedora e Amazon Linux.
 
