@@ -63,7 +63,7 @@ function test_docker_installation() {
 
 function configure_docker_post_install() {
   echo "Configuring Docker post-installation steps..."
-  sudo groupadd docker || true  # Avoid error if group already exists
+  sudo groupadd docker
   sudo usermod -aG docker $USER
   newgrp docker
   echo "You need to log out and log back in for the group changes to take effect."
