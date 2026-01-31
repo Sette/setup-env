@@ -1,13 +1,12 @@
 #!/bin/bash
 
-# This script instala UV, python e pipx e configura o ambiente de acordo com o shell especificado (bash ou zsh).
+# This script appends pyenv and pyenv-virtualenv configuration to ~/.zshrc if not already present.
+
 set -euo pipefail
 
-if [ "$#" -ne 1 ] || ([ "$1" != "bash" ] && [ "$1" != "zsh" ]); then
-  echo "Uso: $0 [bash|zsh]"
-  exit 1
-fi
-
+# === Constants ===
+ZSHRC_FILE="${HOME}/.zshrc"
+BASHRC_FILE="${HOME}/.bashrc"
 
 # === Functions ===
 
@@ -30,8 +29,8 @@ function install_pipx() {
   uv pip install pipx
   pipx install poetry
   pipx ensurepath
-  # Ensure in shell context
-  $SHELL_TYPE -i -c 'pipx ensurepath'
+  # Ensure in Zsh context
+  zsh -i -c 'pipx ensurepath'
 }
 
 
@@ -49,14 +48,7 @@ echo "Upgrading system packages..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
 check_success "curl -LsSf https://astral.sh/uv/install.sh"
 
-# Adicione todos os caminhos comuns para uv ao PATH
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
-
-# Confere se 'uv' está no PATH
-if ! command -v uv >/dev/null 2>&1; then
-    echo "Erro: 'uv' não está disponível no PATH! Instalação falhou ou o PATH não foi ajustado."
-    exit 1
-fi
+export PATH="$HOME/.local/bin:$PATH"
 
 install_python_global
 
