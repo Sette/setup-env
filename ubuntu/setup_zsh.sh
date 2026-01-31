@@ -53,4 +53,3 @@ sed -i 's/plugins=(git)/plugins=(\
 
 # Inform the user that the update was successful
 echo "Plugins updated successfully in $ZSHRC_FILE"
-source $ZSHRC_FILE
