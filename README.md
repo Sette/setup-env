@@ -23,7 +23,7 @@ chmod +x setup_zsh.sh
 ./setup_zsh.sh
 ```
 
-Para instalar o docker no ubuntu:
+Para instalar o docker no ubuntu (Depois disso, Faça logof para que as permissões surtam efeito):
 
 ```bash
 cd ubuntu
@@ -37,6 +37,18 @@ Para instalar o python com o UV:
 cd ubuntu
 chmod +x setup_python.sh
 ./setup_python.sh
+```
+
+Recarregue seu interpretador rodando:
+
+Caso use o zsh, rode:
+```bash
+source ~/.zshrc
+```
+
+Caso use o bash, rode:
+```bash
+source ~/.bashrc
 ```
 
 Criando uma .venv:
