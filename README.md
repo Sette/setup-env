@@ -63,6 +63,9 @@ Ativando a .venv:
 source .venv/bin/activate
 ```
 
+Recomendações para desenvolvimento python no VScode:
+
+https://code.visualstudio.com/docs/python/linting
 
 Siga as instruções de cada script, pois podem exigir permissões de administrador (sudo).
 
@@ -84,3 +87,5 @@ Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](L
 ---
 
 Colabore sugerindo melhorias e relatando problemas.
+
+##
