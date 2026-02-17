@@ -36,13 +36,14 @@ echo "Updating system packages and installing requirements..."
 
 # Install required system packages on Fedora using dnf
 sudo dnf install -y make curl gcc gcc-c++ openssl-devel bzip2-devel readline-devel sqlite-devel wget llvm ncurses-devel xz tk-devel libxml2-devel xmlsec1-devel libffi-devel lzma-sdk-devel
-
 check_success "sudo dnf install"
 
 # Install or upgrade uv - preferred method is via rpm or curl installer
 echo "Installing uv..."
 curl -LsSf https://astral.sh/uv/install.sh | sh
 check_success "curl -LsSf https://astral.sh/uv/install.sh"
+
+export PATH="$HOME/.local/bin:$PATH"
 
 # Install global Python version using uv
 install_python_global
