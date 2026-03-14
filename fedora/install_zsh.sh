@@ -18,7 +18,7 @@ sudo dnf install -y zsh git wget
 
 # Install Oh My Zsh
 echo "Installing Oh My Zsh..."
-RUNZSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended
 
 # Set Zsh as default shell for the current session
 echo "Switching to zsh..."
