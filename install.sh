@@ -339,7 +339,105 @@ install_python_global() {
   uv python pin 3.12.11
 }
 
+# Docker functions
 
+install_docker_apt() {
+    if check_cmd apt; then
+        get_install_opts_for_apt
+        opts="${RETVAL}"
+        echo "Updating package lists..."
+        $SUDO apt-get update $opts
+
+        # Update SO packages
+        echo "Updating SO packages..."
+        $SUDO apt-get dist-upgrade $opts
+
+        # Cleaning SO packages
+        echo "Cleaning up unused packages..."
+        $SUDO apt-get auto-remove $opts
+
+        $SUDO apt-get install ca-certificates curl gnupg
+
+        # Add Docker GPG key
+        $SUDO curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+        echo "Adding Docker repository..."
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=$DOCKER_KEYRING_PATH] https://download.docker.com/linux/ubuntu \
+        $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+        $SUDO tee "$DOCKER_APT_SOURCE_LIST" > /dev/null
+        $SUDO apt-get update $opts
+
+        #Instalando Docker
+        echo "Instalando Docker..."
+        $SUDO apt install $opts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        $SUDO service docker start
+    fi
+}
+
+install_docker_dnf(){
+    if check_cmd dnf; then
+        get_install_opts_for_dnf
+        opts="${RETVAL}"
+        echo "Updating dnf..."
+        $SUDO dnf install -y dnf
+
+        # Install required system packages on Fedora using dnf
+        $SUDO dnf install $opts make curl gcc gcc-c++ openssl-devel \
+            bzip2-devel readline-devel wget llvm ncurses-devel xz tk-devel \
+            libxml2-devel xmlsec1-devel libffi-devel lzma-sdk-devel \
+            dnf-plugins-core curl
+
+        $SUDO dnf-3 config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+        $SUDO dnf install $opts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        $SUDO systemctl enable --now docker
+
+    fi
+}
+
+install_docker_yum() {
+    if check_cmd yum; then
+        get_install_opts_for_yum
+        opts="${RETVAL}"
+        echo "Installing Docker dependencies using yum..."
+        $SUDO yum install $opts yum-utils
+        
+        echo "Adding Docker repository for CentOS/RHEL..."
+        $SUDO yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+        
+        echo "Installing Docker engine..."
+        $SUDO yum install $opts docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+        
+        $SUDO systemctl enable --now docker
+    fi
+}
+
+install_docker_zypper() {
+    if check_cmd zypper; then
+        get_install_opts_for_zypper
+        opts="${RETVAL}"
+        echo "Updating package lists..."
+        $SUDO zypper refresh $opts
+
+        echo "Adding Docker repository for openSUSE..."
+        # openSUSE usually has docker in its official repositories, but for the latest version:
+        $SUDO zypper addrepo https://download.docker.com/linux/opensuse/docker-ce.repo || true
+        
+        echo "Installing Docker..."
+        $SUDO zypper install $opts docker docker-glibc-compat containerd docker-compose-switch
+        
+        $SUDO systemctl enable --now docker
+    fi
+}
+
+configure_docker_post_install() {
+    $SUDO docker run hello-world
+    echo "Configuring Docker post-installation steps..."
+    $SUDO groupadd docker || true  # Avoid error if group already exists
+    $SUDO usermod -aG docker "$USER"
+    echo "You need to log out and log back in for the group changes to take effect."
+    echo "Testing Docker installation..."
+    $SUDO docker run hello-world
+}
 
 
 if $INSTALL_ZSH; then
@@ -359,3 +457,10 @@ if $INSTALL_PYTHON; then
     install_python
 fi
 
+if $INSTALL_DOCKER; then
+    install_docker_apt
+    install_docker_dnf
+    install_docker_zypper
+    install_docker_yum
+    configure_docker_post_install
+fi
