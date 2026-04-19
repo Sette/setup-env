@@ -8,35 +8,31 @@ Automatizar a preparação do ambiente de dados e ciência, instalando ferrament
 
 ## Estrutura do Projeto
 
-- **ubuntu/**: Scripts para preparar ambiente Ubuntu (instalação de Docker, Python, Zsh, etc.).
-- **fedora/**: Scripts para preparar ambiente Fedora (instalação de Docker, Python, Zsh, etc.).
-- **amazon/**: Scripts para Amazon Linux (ex: configuração aprimorada do Zsh).
+- install.sh: Script para preparar ambiente Linux (instalação de Docker, Python, Zsh, etc.).
 - **LICENSE**: Licença do projeto (MIT License).
 
 ## Como Usar
 
-Escolha a pasta correspondente ao seu sistema operacional e execute os scripts conforme necessário. Por exemplo, para preparar o Zsh em Ubuntu:
+O script principal `install.sh` permite instalar múltiplos componentes de uma só vez utilizando flags.
 
+### Opções Disponíveis
+
+- `-n`: **Modo Não-interativo**. Assume "sim" (yes) para todas as confirmações durante a instalação.
+- `-z`: **Instalar ZSH**. Configura o ZSH com Oh My Zsh e plugins (syntax highlighting, autosuggestions).
+- `-p`: **Instalar Python**. Instala as dependências do sistema e o gerenciador `uv` com a versão global do Python.
+- `-d`: **Instalar Docker**. Realiza a instalação e configuração do Docker no sistema.
+- `-h`: **Ajuda**. Exibe a mensagem de ajuda com todas as opções.
+
+### Exemplos
+
+Para instalar tudo (Zsh, Python e Docker) no modo silencioso:
 ```bash
-cd ubuntu
-chmod +x setup_zsh.sh
-./setup_zsh.sh
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -d -n
 ```
 
-Para instalar o docker no ubuntu (Depois disso, Faça logof para que as permissões surtam efeito):
-
+Para instalar apenas o Zsh e Python:
 ```bash
-cd ubuntu
-chmod +x setup_docker.sh    # Exemplo para instalar Docker
-./setup_docker.sh
-```
-
-Para instalar o python com o UV:
-
-```bash
-cd ubuntu
-chmod +x setup_python.sh
-./setup_python.sh
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -n
 ```
 
 Recarregue seu interpretador rodando:
@@ -51,7 +47,7 @@ Caso use o bash, rode:
 source ~/.bashrc
 ```
 
-Criando uma .venv:
+(Optional) (Python) Criando uma .venv:
 
 ```bash
 uv venv
