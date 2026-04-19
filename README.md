@@ -1,87 +1,85 @@
 # Setup-env
 
-Este repositório contém um conjunto de scripts e configurações para facilitar o setup de ambientes de desenvolvimento semelhantes ao Kaggle em diferentes distribuições Linux: Ubuntu, Fedora e Amazon Linux.
+This repository contains a set of scripts and configurations to facilitate the setup of development environments similar to Kaggle on different Linux distributions: Ubuntu, Fedora, and Amazon Linux.
 
-## Objetivo
+## Objective
 
-Automatizar a preparação do ambiente de dados e ciência, instalando ferramentas essenciais como Python, Docker, Zsh (com plugins), entre outros, para que o usuário esteja pronto para iniciar trabalhos em Machine Learning e Ciência de Dados rapidamente.
+Automate the preparation of data and science environments, installing essential tools such as Python, Docker, Zsh (with plugins), among others, so that the user is ready to start Machine Learning and Data Science work quickly.
 
-## Estrutura do Projeto
+## Project Structure
 
-- install.sh: Script para preparar ambiente Linux (instalação de Docker, Python, Zsh, etc.).
-- **LICENSE**: Licença do projeto (MIT License).
+- install.sh: Script to prepare Linux environment (installation of Docker, Python, Zsh, etc.).
+- **LICENSE**: Project license (MIT License).
 
-## Como Usar
+## How to Use
 
-O script principal `install.sh` permite instalar múltiplos componentes de uma só vez utilizando flags.
+The main script `install.sh` allows you to install multiple components at once using flags.
 
-### Opções Disponíveis
+### Available Options
 
-- `-n`: **Modo Não-interativo**. Assume "sim" (yes) para todas as confirmações durante a instalação.
-- `-z`: **Instalar ZSH**. Configura o ZSH com Oh My Zsh e plugins (syntax highlighting, autosuggestions).
-- `-p`: **Instalar Python**. Instala as dependências do sistema e o gerenciador `uv` com a versão global do Python.
-- `-d`: **Instalar Docker**. Realiza a instalação e configuração do Docker no sistema.
-- `-h`: **Ajuda**. Exibe a mensagem de ajuda com todas as opções.
+- `-n`: **Non-interactive Mode**. Assumes "yes" for all confirmations during installation.
+- `-z`: **Install ZSH**. Configures ZSH with Oh My Zsh and plugins (syntax highlighting, autosuggestions).
+- `-p`: **Install Python**. Installs system dependencies and the `uv` manager with the global Python version.
+- `-d`: **Install Docker**. Performs Docker installation and configuration on the system.
+- `-h`: **Help**. Displays the help message with all options.
 
-### Exemplos
+### Examples
 
-Para instalar tudo (Zsh, Python e Docker) no modo silencioso:
+To install everything (Zsh, Python, and Docker) in silent mode:
 ```bash
 sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -d -n
 ```
 
-Para instalar apenas o Zsh e Python:
+To install only Zsh and Python:
 ```bash
 sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -n
 ```
 
-Recarregue seu interpretador rodando:
+Reload your shell by running:
 
-Caso use o zsh, rode:
+If using zsh, run:
 ```bash
 source ~/.zshrc
 ```
 
-Caso use o bash, rode:
+If using bash, run:
 ```bash
 source ~/.bashrc
 ```
 
-(Optional) (Python) Criando uma .venv:
+(Optional) (Python) Creating a .venv:
 
 ```bash
 uv venv
 ```
 
-Ativando a .venv:
+Activating the .venv:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Recomendações para desenvolvimento python no VScode:
+Recommendations for Python development in VS Code:
 
 https://code.visualstudio.com/docs/python/linting
 
-Siga as instruções de cada script, pois podem exigir permissões de administrador (sudo).
+Follow the instructions for each script, as they may require administrator (sudo) permissions.
 
-## Pré-requisitos
+## Prerequisites
 
-- Permissão de superusuário (sudo)
-- Conexão com internet
-- Git instalado (para alguns scripts e plugins)
+- Superuser permission (sudo)
+- Internet connection
+- Git installed (for some scripts and plugins)
 
-## Observações
+## Notes
 
-- Os scripts podem ser adaptados conforme sua necessidade.
-- Verifique o conteúdo de cada script antes de rodar para entender suas ações e dependências.
+- Scripts can be adapted to your needs.
+- Check the content of each script before running to understand its actions and dependencies.
 
-## Licença
+## License
 
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais detalhes.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
 ---
 
-Colabore sugerindo melhorias e relatando problemas.
-
-##
+Collaborate by suggesting improvements and reporting issues.
