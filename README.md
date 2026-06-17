@@ -4,11 +4,11 @@ This repository contains a set of scripts and configurations to facilitate the s
 
 ## Objective
 
-Automate the preparation of data and science environments, installing essential tools such as Python, Docker, Zsh (with plugins), among others, so that the user is ready to start Machine Learning and Data Science work quickly.
+Automate the preparation of data and science environments, installing essential tools such as Python, Docker, Zsh (with plugins), Fish, among others, so that the user is ready to start Machine Learning and Data Science work quickly.
 
 ## Project Structure
 
-- install.sh: Script to prepare Linux environment (installation of Docker, Python, Zsh, etc.).
+- install.sh: Script to prepare Linux environment (installation of Docker, Python, Zsh, Fish, etc.).
 - **LICENSE**: Project license (MIT License).
 
 ## Alternative
@@ -32,20 +32,26 @@ The main script `install.sh` allows you to install multiple components at once u
 
 - `-n`: **Non-interactive Mode**. Assumes "yes" for all confirmations during installation.
 - `-z`: **Install ZSH**. Configures ZSH with Oh My Zsh and plugins (syntax highlighting, autosuggestions).
-- `-p`: **Install Python**. Installs system dependencies and the `uv` manager with the global Python version.
+- `-f`: **Install Fish**. Installs the Fish shell using the available package manager.
+- `-u`: **Install uv**. Installs system dependencies, the `uv` manager, and the global Python version.
 - `-d`: **Install Docker**. Performs Docker installation and configuration on the system.
 - `-h`: **Help**. Displays the help message with all options.
 
 ### Examples
 
-To install everything (Zsh, Python, and Docker) in silent mode:
+To install everything (Zsh, uv/Python, and Docker) in silent mode:
 ```bash
-sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -d -n
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -u -d -n
 ```
 
-To install only Zsh and Python:
+To install only Zsh and uv/Python:
 ```bash
-sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -p -n
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -z -u -n
+```
+
+To install only Fish and uv/Python::
+```bash
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -f -u -n
 ```
 
 Reload your shell by running:

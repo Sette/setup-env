@@ -15,7 +15,8 @@ fi
 set -e
 ARCH=$(uname -m)
 INSTALL_ZSH=false
-INSTALL_PYTHON=false
+INSTALL_FISH=false
+INSTALL_UV=false
 INSTALL_DOCKER=false
 ASSUME_YES=false
 
@@ -25,7 +26,8 @@ show_help() {
     echo "Options:"
     echo "  -n                Non-interactive mode (assume yes)."
     echo "  -z                Install ZSH."
-    echo "  -p                Install Python."
+    echo "  -f                Install Fish."
+    echo "  -u                Install uv and global Python."
     echo "  -d                Install Docker."
     echo "  -h                Show this help message."
     echo ""
@@ -34,15 +36,17 @@ show_help() {
 # Parse command line arguments. Available arguments are:
 # -n                Non-interactive mode.
 # -z                Install ZSH.
-# -p                Install Python.
+# -f                Install Fish.
+# -u                Install uv and global Python.
 # -d                Install Docker.
 # -h                Show help.
-while getopts 'nzpdh' opt
+while getopts 'nzfudh' opt
 do
     case $opt in
         n) ASSUME_YES=true ;;
         z) INSTALL_ZSH=true ;;
-        p) INSTALL_PYTHON=true ;;
+        f) INSTALL_FISH=true ;;
+        u) INSTALL_UV=true ;;
         d) INSTALL_DOCKER=true ;;
         h) show_help; exit 0 ;;
         *) show_help; exit 1 ;;
@@ -229,6 +233,53 @@ install_zsh() {
 
     # Inform the user that the update was successful
     echo "Plugins updated successfully in $ZSHRC_FILE"
+}
+
+# Fish functions
+
+install_fish_apt() {
+    if check_cmd apt; then
+        get_install_opts_for_apt
+        opts="${RETVAL}"
+        echo "Updating package lists..."
+        ${SUDO} apt-get update $opts
+
+        echo "Installing fish..."
+        ${SUDO} apt-get install $opts fish
+    fi
+}
+
+install_fish_dnf() {
+    if check_cmd dnf5; then
+        get_install_opts_for_dnf
+        opts="${RETVAL}"
+        echo "Installing fish with dnf5..."
+        ${SUDO} dnf5 install $opts fish
+    fi
+    if check_cmd dnf; then
+        get_install_opts_for_dnf
+        opts="${RETVAL}"
+        echo "Installing fish with dnf..."
+        ${SUDO} dnf install $opts fish
+    fi
+}
+
+install_fish_yum() {
+    if check_cmd yum; then
+        get_install_opts_for_yum
+        opts="${RETVAL}"
+        echo "Installing fish with yum..."
+        ${SUDO} yum install $opts fish
+    fi
+}
+
+install_fish_zypper() {
+    if check_cmd zypper; then
+        get_install_opts_for_zypper
+        opts="${RETVAL}"
+        echo "Installing fish with zypper..."
+        ${SUDO} zypper install $opts fish
+    fi
 }
 
 # Python functions
@@ -448,8 +499,15 @@ if $INSTALL_ZSH; then
     install_zsh
 fi
 
+if $INSTALL_FISH; then
+    install_fish_apt
+    install_fish_dnf
+    install_fish_zypper
+    install_fish_yum
+fi
 
-if $INSTALL_PYTHON; then
+
+if $INSTALL_UV; then
     install_python_apt
     install_python_dnf
     install_python_zypper
