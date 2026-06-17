@@ -11,6 +11,19 @@ Automate the preparation of data and science environments, installing essential 
 - install.sh: Script to prepare Linux environment (installation of Docker, Python, Zsh, etc.).
 - **LICENSE**: Project license (MIT License).
 
+## Alternative
+
+To install fish in fedora:
+```bash
+sudo dnf install fish -y
+```
+
+Install uv:
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+
 ## How to Use
 
 The main script `install.sh` allows you to install multiple components at once using flags.
