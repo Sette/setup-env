@@ -54,6 +54,8 @@ The main script `install.sh` allows you to install multiple components at once u
 - `-k`: **Install Kiro**. Installs Kiro using the Linux installer script.
 - `-x`: **Install Codex CLI**. Installs the Codex CLI.
 - `-c`: **Install Claude Code CLI**. Installs the Claude Code CLI.
+- `-e LIST`: **Exclusion Mode**. Installs everything except the comma-separated items in `LIST`.
+  Available exclusion values: `zsh`, `fish`, `uv`, `docker`, `kiro`, `codex`, `claude-code`.
 - `-h`: **Help**. Displays the help message with all options.
 
 ### Examples
@@ -76,6 +78,11 @@ sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/mai
 To install Kiro, Codex CLI, and Claude Code CLI:
 ```bash
 sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -k -x -c -n
+```
+
+To install everything except Docker and Kiro:
+```bash
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -e docker,zsh -n
 ```
 
 Reload your shell by running:

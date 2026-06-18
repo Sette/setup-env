@@ -21,6 +21,8 @@ INSTALL_DOCKER=false
 INSTALL_KIRO=false
 INSTALL_CODEX=false
 INSTALL_CLAUDE_CODE=false
+EXCLUSION_MODE=false
+EXCLUDE_LIST=
 ASSUME_YES=false
 
 show_help() {
@@ -35,7 +37,13 @@ show_help() {
     echo "  -k                Install Kiro."
     echo "  -x                Install Codex CLI."
     echo "  -c                Install Claude Code CLI."
+    echo "  -e LIST           Exclusion mode: install everything except LIST."
+    echo "                    LIST values: zsh, fish, uv, docker, kiro, codex, claude-code."
     echo "  -h                Show this help message."
+    echo ""
+    echo "Examples:"
+    echo "  $0 -e docker,kiro -n"
+    echo "  $0 -e zsh,fish,codex -n"
     echo ""
 }
 
@@ -48,8 +56,9 @@ show_help() {
 # -k                Install Kiro.
 # -x                Install Codex CLI.
 # -c                Install Claude Code CLI.
+# -e LIST           Exclusion mode: install everything except LIST.
 # -h                Show help.
-while getopts 'nzfudkxch' opt
+while getopts 'nzfudkxce:h' opt
 do
     case $opt in
         n) ASSUME_YES=true ;;
@@ -60,6 +69,14 @@ do
         k) INSTALL_KIRO=true ;;
         x) INSTALL_CODEX=true ;;
         c) INSTALL_CLAUDE_CODE=true ;;
+        e)
+            EXCLUSION_MODE=true
+            if [ -n "$EXCLUDE_LIST" ]; then
+                EXCLUDE_LIST="${EXCLUDE_LIST},${OPTARG}"
+            else
+                EXCLUDE_LIST="${OPTARG}"
+            fi
+            ;;
         h) show_help; exit 0 ;;
         *) show_help; exit 1 ;;
     esac
@@ -73,6 +90,51 @@ require_cmd() {
     if ! check_cmd "$1"; then
         echo "Error: '$1' is required for this installation."
         exit 1
+    fi
+}
+
+enable_all_installers() {
+    INSTALL_ZSH=true
+    INSTALL_FISH=true
+    INSTALL_UV=true
+    INSTALL_DOCKER=true
+    INSTALL_KIRO=true
+    INSTALL_CODEX=true
+    INSTALL_CLAUDE_CODE=true
+}
+
+exclude_component() {
+    case "$1" in
+        zsh)
+            INSTALL_ZSH=false ;;
+        fish)
+            INSTALL_FISH=false ;;
+        uv|python)
+            INSTALL_UV=false ;;
+        docker)
+            INSTALL_DOCKER=false ;;
+        kiro)
+            INSTALL_KIRO=false ;;
+        codex|codex-cli)
+            INSTALL_CODEX=false ;;
+        claude|claude-code|claude_code|claudecode)
+            INSTALL_CLAUDE_CODE=false ;;
+        "")
+            ;;
+        *)
+            echo "Error: unknown exclusion '$1'."
+            echo "Allowed values: zsh, fish, uv, docker, kiro, codex, claude-code."
+            exit 1
+            ;;
+    esac
+}
+
+apply_exclusion_mode() {
+    if $EXCLUSION_MODE; then
+        enable_all_installers
+        for component in $(printf '%s' "$EXCLUDE_LIST" | tr ',' ' '); do
+            exclude_component "$component"
+        done
     fi
 }
 
@@ -529,6 +591,7 @@ install_claude_code_cli() {
     curl -fsSL https://claude.ai/install.sh | bash
 }
 
+apply_exclusion_mode
 
 if $INSTALL_ZSH; then
     install_zsh_apt
