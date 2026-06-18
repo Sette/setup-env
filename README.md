@@ -23,6 +23,22 @@ Install uv:
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
+Install Kiro :
+```bash
+curl -fsSL https://raw.githubusercontent.com/abhilashiig/kiro-ide-linux-installation/main/clone-and-install-kiro.sh | bash
+```
+
+Install Codex cli:
+```bash
+curl -fsSL https://chatgpt.com/codex/install.sh | sh
+bash
+```
+
+Install Claude Code cli:
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+bash
+```
 
 ## How to Use
 
@@ -35,6 +51,9 @@ The main script `install.sh` allows you to install multiple components at once u
 - `-f`: **Install Fish**. Installs the Fish shell using the available package manager.
 - `-u`: **Install uv**. Installs system dependencies, the `uv` manager, and the global Python version.
 - `-d`: **Install Docker**. Performs Docker installation and configuration on the system.
+- `-k`: **Install Kiro**. Installs Kiro using the Linux installer script.
+- `-x`: **Install Codex CLI**. Installs the Codex CLI.
+- `-c`: **Install Claude Code CLI**. Installs the Claude Code CLI.
 - `-h`: **Help**. Displays the help message with all options.
 
 ### Examples
@@ -52,6 +71,11 @@ sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/mai
 To install only Fish and uv/Python::
 ```bash
 sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -f -u -n
+```
+
+To install Kiro, Codex CLI, and Claude Code CLI:
+```bash
+sh <(wget -qO - https://raw.githubusercontent.com/Sette/setup-env/refs/heads/main/install.sh) -k -x -c -n
 ```
 
 Reload your shell by running:

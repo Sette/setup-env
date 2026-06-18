@@ -18,6 +18,9 @@ INSTALL_ZSH=false
 INSTALL_FISH=false
 INSTALL_UV=false
 INSTALL_DOCKER=false
+INSTALL_KIRO=false
+INSTALL_CODEX=false
+INSTALL_CLAUDE_CODE=false
 ASSUME_YES=false
 
 show_help() {
@@ -29,6 +32,9 @@ show_help() {
     echo "  -f                Install Fish."
     echo "  -u                Install uv and global Python."
     echo "  -d                Install Docker."
+    echo "  -k                Install Kiro."
+    echo "  -x                Install Codex CLI."
+    echo "  -c                Install Claude Code CLI."
     echo "  -h                Show this help message."
     echo ""
 }
@@ -39,8 +45,11 @@ show_help() {
 # -f                Install Fish.
 # -u                Install uv and global Python.
 # -d                Install Docker.
+# -k                Install Kiro.
+# -x                Install Codex CLI.
+# -c                Install Claude Code CLI.
 # -h                Show help.
-while getopts 'nzfudh' opt
+while getopts 'nzfudkxch' opt
 do
     case $opt in
         n) ASSUME_YES=true ;;
@@ -48,6 +57,9 @@ do
         f) INSTALL_FISH=true ;;
         u) INSTALL_UV=true ;;
         d) INSTALL_DOCKER=true ;;
+        k) INSTALL_KIRO=true ;;
+        x) INSTALL_CODEX=true ;;
+        c) INSTALL_CLAUDE_CODE=true ;;
         h) show_help; exit 0 ;;
         *) show_help; exit 1 ;;
     esac
@@ -55,6 +67,13 @@ done
 
 check_cmd() {
     command -v "$1" 2> /dev/null
+}
+
+require_cmd() {
+    if ! check_cmd "$1"; then
+        echo "Error: '$1' is required for this installation."
+        exit 1
+    fi
 }
 
 get_install_opts_for_apt() {
@@ -490,6 +509,26 @@ configure_docker_post_install() {
     $SUDO docker run hello-world
 }
 
+# Developer tools
+
+install_kiro() {
+    require_cmd curl
+    echo "Installing Kiro..."
+    curl -fsSL https://raw.githubusercontent.com/abhilashiig/kiro-ide-linux-installation/main/clone-and-install-kiro.sh | bash
+}
+
+install_codex_cli() {
+    require_cmd curl
+    echo "Installing Codex CLI..."
+    curl -fsSL https://chatgpt.com/codex/install.sh | sh
+}
+
+install_claude_code_cli() {
+    require_cmd curl
+    echo "Installing Claude Code CLI..."
+    curl -fsSL https://claude.ai/install.sh | bash
+}
+
 
 if $INSTALL_ZSH; then
     install_zsh_apt
@@ -521,4 +560,16 @@ if $INSTALL_DOCKER; then
     install_docker_zypper
     install_docker_yum
     configure_docker_post_install
+fi
+
+if $INSTALL_KIRO; then
+    install_kiro
+fi
+
+if $INSTALL_CODEX; then
+    install_codex_cli
+fi
+
+if $INSTALL_CLAUDE_CODE; then
+    install_claude_code_cli
 fi
